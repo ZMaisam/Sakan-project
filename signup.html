@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Create Account | StudentRooms</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+
+    <header id="site-header" class="header">
+      <div class="container header-inner">
+        <div class="logo">
+          <a href="index.html"
+            ><span class="logo-mark">🏠</span
+           <span class="logo-text">sakan سكن</span>
+
+        </div>
+        <nav class="nav">
+          <a href="index.html">Home</a>
+          <a href="rooms.html">الغرف المتاحة</a>
+          <a href="saved.html">Saved</a>
+          <a href="signup.html">حساب جديد</a>
+          <a href="login.html">تسجيل الدخول</a>
+        </nav>
+        <button id="hamburger" class="hamburger">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </header>
+
+    <main class="page" id="signup-page">
+      <div class="container">
+        <div class="form-card" data-animate>
+          <h1>Create Account</h1>
+          <p class="muted">
+            Choose whether you are a student (طالب) or renter (مؤجر).
+          </p>
+
+          <form id="signup-form" class="form-grid">
+            <label class="field">
+              <span>Full Name / الاسم</span>
+              <input type="text" id="su-name" required />
+            </label>
+
+            <label class="field">
+              <span>Phone Number / رقم الهاتف</span>
+              <input type="tel" id="su-phone" required />
+            </label>
+
+            <label class="field">
+              <span>Email</span>
+              <input type="email" id="su-email" required />
+            </label>
+
+            <label class="field">
+              <span>Password</span>
+              <input type="password" id="su-pass" required />
+            </label>
+
+                <label class="field">
+  <span>Gender / الجنس</span>
+  <select id="su-gender" required>
+    <option value="">اختر الجنس</option>
+    <option value="male">ذكر</option>
+    <option value="female">انثى</option>
+  </select>
+</label>
+
+            <aside id="mobile-menu" class="mobile-menu">
+              <a href="index.html">الصفحة الرئيسية</a>
+              <a href="rooms.html">الغـرف المتاحة</a>
+              <a href="saved.html">المحفوظات</a>
+              <a href="signup.html">حساب جديد</a>
+              <a href="login.html">تسجيل الدخول</a>
+              
+            </aside>
+
+           <div class="field">
+  <span>User Type / نوع الحساب</span>
+
+  <div class="radio-group">
+
+    <div class="radio-option">
+      <input type="radio" name="su-type" value="student" required />
+      <label>طالب (Student)</label>
+    </div>
+
+    <div class="radio-option">
+      <input type="radio" name="su-type" value="renter" required />
+      <label>مؤجر (Renter)</label>
+    </div>
+
+  </div>
+</div>
+
+
+            <button type="submit" class="btn-primary btn-block">
+              Create Account
+            </button>
+            <p class="muted center">
+              Already have an account? <a href="login.html">Login</a>
+            </p>
+          </form>
+        </div>
+      </div>
+    </main>
+
+    <script src="script.js" defer></script>
+  </body>
+</html>

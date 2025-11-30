@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Room Details | Sakan</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <header id="site-header" class="header">
+      <div class="container header-inner">
+        <div class="logo">
+          <a href="index.html">
+            <span class="logo-mark">🏠</span>
+            <span class="logo-text">sakan سكن</span>
+          </a>
+        </div>
+
+        <nav class="nav">
+          <a href="index.html">الصفحة الرئيسية</a>
+          <a href="rooms.html">الغرف المتاحة</a>
+          <a href="saved.html">المحفوظات</a>
+          <a href="signup.html">حساب جديد</a>
+          <a href="login.html">تسجيل الدخول</a>
+        </nav>
+
+        <button id="hamburger" class="hamburger">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </header>
+
+    <aside id="mobile-menu" class="mobile-menu">
+      <a href="index.html">الصفحة الرئيسية</a>
+      <a href="rooms.html">الغـرف المتاحة</a>
+      <a href="saved.html">المحفوظات</a>
+      <a href="signup.html">حساب جديد</a>
+      <a href="login.html">تسجيل الدخول</a>
+    </aside>
+
+    <main class="page" id="details-page">
+      <div class="container">
+        <div class="details-layout" data-animate>
+          <div class="details-image">
+            <div class="slider">
+              <button class="slide-btn prev">❮</button>
+
+              <div class="slides"></div>
+
+              <button class="slide-btn next">❯</button>
+            </div>
+          </div>
+
+          <div class="details-info">
+            <h1 id="det-title"></h1>
+            <p class="muted" id="det-location"></p>
+            <p id="det-desc"></p>
+
+            <p><strong>price:</strong> <span id="det-price"></span>₪</p>
+            <p><strong>Serial ID:</strong> <span id="det-id"></span></p>
+            <p><strong>Availability:</strong> <span id="det-avail"></span></p>
+            <p><strong>Renter Phone:</strong> <span id="det-phone"></span></p>
+
+            <div class="details-actions">
+              <button id="det-call" class="icon-btn">اتصال</button>
+              <button id="det-save" class="icon-btn">حفظ</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script src="script.js" defer></script>
+  </body>
+</html>

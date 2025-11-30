@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Saved Rooms | StudentRooms</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header id="site-header" class="header">
+      <div class="container header-inner">
+        <div class="logo">
+          <a href="index.html"
+            ><span class="logo-mark">🏠</span
+           <span class="logo-text">sakan سكن</span>
+        </div>
+        <nav class="nav">
+          <a href="index.html">الصفحة الرئيسية</a>
+          <a href="rooms.html">الغرف المتاحة</a>
+          <a href="saved.html">المحفوظات</a>
+          <a href="signup.html">حساب جديد</a>
+          <a href="login.html">تسجيل الدخول</a>
+        </nav>
+        <button id="hamburger" class="hamburger">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </header>
+
+    <aside id="mobile-menu" class="mobile-menu">
+      <a href="index.html">الصفحة الرئيسية</a>
+      <a href="rooms.html">الغـرف المتاحة</a>
+      <a href="saved.html">المحفوظات</a>
+      <a href="signup.html">حساب جديد</a>
+      <a href="login.html">تسجيل الدخول</a>
+    
+    </aside>
+
+    <main class="page" id="saved-page">
+      <div class="container">
+        <h1 data-animate>المحفوظات</h1>
+        <p class="muted" data-animate>الغرف التي قمت بحفظها</p>
+        <div id="cards-grid" class="cards-grid" aria-live="polite"></div>
+      </div>
+    </main>
+
+    <script src="script.js" defer></script>
+  </body>
+</html>

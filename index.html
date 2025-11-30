@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Student Housing — Find Rooms | الغرف المتاحة</title>
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header id="site-header" class="header">
+      <div class="container header-inner">
+        <div class="logo">
+          <a href="index.html">
+            <span class="logo-mark">🏠</span>
+            <span class="logo-text">sakan سكن</span>
+          </a>
+        </div>
+
+        <nav class="nav" id="main-nav">
+          <a href="index.html">الصفحة الرئيسة</a>
+          <a href="rooms.html">الغـرف المتاحة</a>
+          <a href="saved.html">المحفوظات</a>
+          <a href="signup.html">حساب جديد</a>
+          <a href="login.html">تسجيل الدخول</a>
+        </nav>
+
+        <button id="hamburger" class="hamburger" aria-label="Open menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </header>
+
+    <aside id="mobile-menu" class="mobile-menu">
+      <a href="index.html">الصفحة الرئيسية</a>
+      <a href="rooms.html">الغـرف المتاحة</a>
+      <a href="saved.html">المحفوظات</a>
+      <a href="signup.html">حساب جديد</a>
+      <a href="login.html">تسجيل الدخول</a>
+    </aside>
+
+    <main>
+      <section class="hero" id="hero">
+        <div class="hero-bg"></div>
+        <div class="container hero-inner">
+          <div class="hero-text" data-animate>
+            <h1>
+              Find Your Perfect Student Room<br /><span class="arabic"
+                >ابحث عن غرفة سكن تناسبك</span
+              >
+            </h1>
+            <p class="lead">
+              Search by city, street or keywords. Fast, simple, and
+              student-focused.
+            </p>
+          </div>
+
+          <form id="hero-search" class="search-card" data-animate>
+            <div class="search-row">
+              <input
+                id="search-key"
+                type="search"
+                placeholder="Search (e.g. near campus, large window)"
+              />
+              <select id="filter-city">
+                <option value="">All Cities</option>
+              </select>
+              <select id="filter-street">
+                <option value="">All Streets</option>
+              </select>
+              <input
+                id="filter-min"
+                type="number"
+                placeholder="Min price"
+                min="0"
+              />
+              <input
+                id="filter-max"
+                type="number"
+                placeholder="Max price"
+                min="0"
+              />
+              <button type="submit" class="btn-primary">Search</button>
+            </div>
+          </form>
+
+          <div class="hero-ctas" data-animate>
+            <a class="btn-secondary" href="rooms.html">Browse Rooms</a>
+            <a class="btn-primary" href="signup.html">Become a Renter / مؤجر</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="section container" id="featured">
+        <h2 data-animate>Featured Rooms</h2>
+        <p class="muted" data-animate>
+          Hand-picked student-friendly rooms — try the search above.
+        </p>
+
+        <div id="cards-grid" class="cards-grid" aria-live="polite"></div>
+        <div class="center mt-24" data-animate>
+          <a href="rooms.html" class="btn-primary">See All Rooms</a>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <div class="container footer-inner">
+          <div><span id="year"></span> sakan - سكن</div>
+          <div class="muted">
+            Made by: Maisam Belal • Reem Saifi • Malak Suleiman
+          </div>
+        </div>
+      </footer>
+    </main>
+
+    <script src="script.js" defer></script>
+  </body>
+</html>

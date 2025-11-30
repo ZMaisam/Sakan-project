@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Renter Dashboard | مؤجر</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+
+  <body>
+    <label class="field">
+      <span>Allowed Gender</span>
+      <select id="rf-allowed" required>
+        <option value="any"></option>
+        <option value="male">ذكور فقط</option>
+        <option value="female">إناث فقط</option>
+      </select>
+    </label>
+
+    <header id="site-header" class="header">
+      <div class="container header-inner">
+        <div class="logo">
+          <a href="index.html">
+            <span class="logo-mark">🏠</span>
+            <span class="logo-text">sakan سكن</span>
+          </a>
+        </div>
+
+        <nav class="nav">
+          <a href="index.html">الصفحة الرئيسة</a>
+          <a href="rooms.html">الغـرف المتاحة</a>
+          <a href="saved.html">المحفوظات</a>
+          <a href="signup.html">حساب جديد</a>
+          <a href="login.html">تسجيل الدخول</a>
+        </nav>
+
+        <button id="hamburger" class="hamburger" aria-label="Open menu">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </header>
+
+    <aside id="mobile-menu" class="mobile-menu">
+      <a href="index.html">الصفحة الرئيسية</a>
+      <a href="rooms.html">الغـرف المتاحة</a>
+      <a href="saved.html">المحفوظات</a>
+      <a href="signup.html">حساب جديد</a>
+      <a href="login.html">تسجيل الدخول</a>
+    </aside>
+
+    <main class="page" id="dashboard-page">
+      <div class="container">
+        <h1 data-animate>Renter Dashboard / لوحة المؤجر</h1>
+        <p class="muted" data-animate>
+          أضف غرف جديدة وقم بإدارة المعروضات الخاصة بك
+        </p>
+
+        <section class="form-card" data-animate>
+          <h2>Post a New Room</h2>
+
+          <form id="room-form" class="form-grid">
+            <label class="field">
+              <span>Title</span>
+              <input type="text" id="rf-title" required />
+            </label>
+
+            <label class="field">
+              <span>City</span>
+              <input type="text" id="rf-city" required />
+            </label>
+
+            <label class="field">
+              <span>Street</span>
+              <input type="text" id="rf-street" required />
+            </label>
+
+            <label class="field">
+              <span>Price</span>
+              <input type="number" id="rf-price" required min="0" />
+            </label>
+
+            <label class="field">
+              <span>روابط الصور (افصل بين الروابط بفاصلة , )</span>
+              <textarea
+                id="rf-images"
+                placeholder="مثال: images/room1.jpg, images/room2.jpg, https://example.com/photo3.jpg"
+                required
+                style="height: 70px; resize: vertical"
+              ></textarea>
+            </label>
+
+            <label class="field">
+              <span>Description</span>
+              <textarea id="rf-desc" rows="3" required></textarea>
+            </label>
+
+            <button type="submit" class="btn-primary btn-block">
+              Post Room
+            </button>
+          </form>
+        </section>
+
+        <section class="section" data-animate>
+          <h2>Your Rooms</h2>
+          <div id="dashboard-rooms" class="cards-grid"></div>
+        </section>
+      </div>
+    </main>
+
+    <script src="script.js" defer></script>
+  </body>
+</html>
