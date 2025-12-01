@@ -45,20 +45,21 @@
       <div class="container">
         <div class="form-card" data-animate>
           <h1>Login</h1>
-          <form id="login-form" class="form-grid">
-            <label class="field">
-              <span>Email</span>
-              <input type="email" id="li-email" required />
-            </label>
-            <label class="field">
-              <span>Password</span>
-              <input type="password" id="li-pass" required />
-            </label>
-            <button type="submit" class="btn-primary btn-block">Login</button>
-            <p class="muted center">
-              No account? <a href="signup.html">Create one</a>
-            </p>
-          </form>
+          <form id="login-form" class="form-grid" action="login.php" method="POST">
+
+  <label class="field">
+    <span>Email</span>
+    <input type="email" name="email" required />
+  </label>
+
+  <label class="field">
+    <span>Password</span>
+    <input type="password" name="password" required />
+  </label>
+
+  <button type="submit" class="btn-primary btn-block">Login</button>
+</form>
+
         </div>
       </div>
     </main>
