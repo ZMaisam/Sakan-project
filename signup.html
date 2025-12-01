@@ -41,71 +41,65 @@
             Choose whether you are a student (طالب) or renter (مؤجر).
           </p>
 
-          <form id="signup-form" class="form-grid">
-            <label class="field">
-              <span>Full Name / الاسم</span>
-              <input type="text" id="su-name" required />
-            </label>
+         <form id="signup-form" class="form-grid" action="signup.php" method="POST">
 
-            <label class="field">
-              <span>Phone Number / رقم الهاتف</span>
-              <input type="tel" id="su-phone" required />
-            </label>
+  <label class="field">
+    <span>Full Name / الاسم</span>
+    <input type="text" id="su-name" name="name" required />
+  </label>
 
-            <label class="field">
-              <span>Email</span>
-              <input type="email" id="su-email" required />
-            </label>
+  <label class="field">
+    <span>Phone Number / رقم الهاتف</span>
+    <input type="tel" id="su-phone" name="phone" required />
+  </label>
 
-            <label class="field">
-              <span>Password</span>
-              <input type="password" id="su-pass" required />
-            </label>
+  <label class="field">
+    <span>Email</span>
+    <input type="email" id="su-email" name="email" required />
+  </label>
 
-                <label class="field">
-  <span>Gender / الجنس</span>
-  <select id="su-gender" required>
-    <option value="">اختر الجنس</option>
-    <option value="male">ذكر</option>
-    <option value="female">انثى</option>
-  </select>
-</label>
+  <label class="field">
+    <span>Password</span>
+    <input type="password" id="su-pass" name="password" required />
+  </label>
 
-            <aside id="mobile-menu" class="mobile-menu">
-              <a href="index.html">الصفحة الرئيسية</a>
-              <a href="rooms.html">الغـرف المتاحة</a>
-              <a href="saved.html">المحفوظات</a>
-              <a href="signup.html">حساب جديد</a>
-              <a href="login.html">تسجيل الدخول</a>
-              
-            </aside>
+  <label class="field">
+    <span>Gender / الجنس</span>
+    <select id="su-gender" name="gender" required>
+      <option value="">اختر الجنس</option>
+      <option value="male">ذكر</option>
+      <option value="female">انثى</option>
+    </select>
+  </label>
 
-           <div class="field">
-  <span>User Type / نوع الحساب</span>
+  <div class="field">
+    <span>User Type / نوع الحساب</span>
 
-  <div class="radio-group">
+    <div class="radio-group">
 
-    <div class="radio-option">
-      <input type="radio" name="su-type" value="student" required />
-      <label>طالب (Student)</label>
+      <div class="radio-option">
+        <input type="radio" name="type" value="student" required />
+        <label>طالب (Student)</label>
+      </div>
+
+      <div class="radio-option">
+        <input type="radio" name="type" value="renter" required />
+        <label>مؤجر (Renter)</label>
+      </div>
+
     </div>
-
-    <div class="radio-option">
-      <input type="radio" name="su-type" value="renter" required />
-      <label>مؤجر (Renter)</label>
-    </div>
-
   </div>
-</div>
 
+  <button type="submit" class="btn-primary btn-block">
+    Create Account
+  </button>
 
-            <button type="submit" class="btn-primary btn-block">
-              Create Account
-            </button>
-            <p class="muted center">
-              Already have an account? <a href="login.html">Login</a>
-            </p>
-          </form>
+  <p class="muted center">
+    Already have an account? <a href="login.html">Login</a>
+  </p>
+
+</form>
+
         </div>
       </div>
     </main>
