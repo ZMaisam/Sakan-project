@@ -86,6 +86,7 @@
         renterPhone: "+970500000002",
         renterId: "demo-renter-2",
         available: true,
+        allowedGender: "male",
         createdAt: Date.now(),
       },
       {
@@ -98,6 +99,7 @@
         images: ["images/room3.jpg"],
         renterPhone: "+970500000003",
         renterId: "demo-renter-1",
+        allowedGender: "male",
         available: false,
         createdAt: Date.now(),
       },
@@ -206,7 +208,6 @@ function populateFilters() {
       <div style="margin-top:8px;color:#374151">${room.description.substring(0,100)}...</div>
 
       <div class="meta" style="margin-top:12px">
-        <div class="meta" style="margin-top:12px">
   <div class="${room.available ? 'badge badge-available' : 'badge badge-unavailable'}">
     ${room.available ? 'متاح' : 'غير متاح'}
   </div>
