@@ -44,50 +44,34 @@
     <main class="page" id="rooms-page">
       <div class="container">
         <h1 data-animate>Available Rooms / الغرف المتاحة</h1>
-        <form id="room-form" class="form-grid" action="add_room.php" method="POST">
-
-  <label class="field">
-    <span>Title</span>
-    <input type="text" name="title" required />
-  </label>
-
-  <label class="field">
-    <span>City</span>
-    <input type="text" name="city" required />
-  </label>
-
-  <label class="field">
-    <span>Street</span>
-    <input type="text" name="street" required />
-  </label>
-
-  <label class="field">
-    <span>Price</span>
-    <input type="number" name="price" required min="0" />
-  </label>
-
-  <label class="field">
-    <span>Allowed Gender</span>
-    <select name="allowed_gender" required>
-      <option value="any"></option>
-      <option value="male">ذكور فقط</option>
-      <option value="female">إناث فقط</option>
-    </select>
-  </label>
-
-  <label class="field">
-    <span>Image Links</span>
-    <textarea name="images" required></textarea>
-  </label>
-
-  <label class="field">
-    <span>Description</span>
-    <textarea name="description" required></textarea>
-  </label>
-
-  <button type="submit" class="btn-primary btn-block">Post Room</button>
-
-</form>
+        <form id="rooms-search" class="search-card" data-animate>
+          <div class="search-row">
+            <input
+              id="search-key"
+              type="search"
+              placeholder="Search by description or location"
+            />
+            <select id="filter-city">
+              <option value="">All Cities</option>
+            </select>
+            <select id="filter-street">
+              <option value="">All Streets</option>
+            </select>
+            <input
+              id="filter-min"
+              type="number"
+              placeholder="Min price"
+              min="0"
+            />
+            <input
+              id="filter-max"
+              type="number"
+              placeholder="Max price"
+              min="0"
+            />
+            <button type="submit" class="btn-primary">Filter</button>
+          </div>
+        </form>
 
         <div id="cards-grid" class="cards-grid" aria-live="polite"></div>
       </div>
