@@ -671,6 +671,13 @@ body {
 }
 
 
+#login-form button,
+#signup-form button,
+.btn-primary,
+.btn-block {
+  color: white !important;
+}
+
 
 
 @media (max-width: 600px) {
