@@ -12,15 +12,6 @@
   </head>
 
   <body>
-    <label class="field">
-      <span>Allowed Gender</span>
-      <select id="rf-allowed" required>
-        <option value="any"></option>
-        <option value="male">ذكور فقط</option>
-        <option value="female">إناث فقط</option>
-      </select>
-    </label>
-
     <header id="site-header" class="header">
       <div class="container header-inner">
         <div class="logo">
@@ -36,6 +27,7 @@
           <a href="saved.html">المحفوظات</a>
           <a href="signup.html">حساب جديد</a>
           <a href="login.html">تسجيل الدخول</a>
+          <a href="myposts.html" class="renter-only">منشوراتي</a>
         </nav>
 
         <button id="hamburger" class="hamburger" aria-label="Open menu">
@@ -50,11 +42,14 @@
       <a href="saved.html">المحفوظات</a>
       <a href="signup.html">حساب جديد</a>
       <a href="login.html">تسجيل الدخول</a>
+      <a href="myposts.html" class="renter-only" style="display: none"
+        >منشوراتي</a
+      >
     </aside>
 
     <main class="page" id="dashboard-page">
       <div class="container">
-        <h1 data-animate>Renter Dashboard / لوحة المؤجر</h1>
+        <h1 data-animate>Renter Dashboard / منشورات المؤجر</h1>
         <p class="muted" data-animate>
           أضف غرف جديدة وقم بإدارة المعروضات الخاصة بك
         </p>
@@ -96,6 +91,15 @@
             <label class="field">
               <span>Description</span>
               <textarea id="rf-desc" rows="3" required></textarea>
+            </label>
+
+            <label class="field">
+              <span>Allowed Gender</span>
+              <select id="rf-allowed" required>
+                <option value="any"></option>
+                <option value="male">ذكور فقط</option>
+                <option value="female">إناث فقط</option>
+              </select>
             </label>
 
             <button type="submit" class="btn-primary btn-block">
