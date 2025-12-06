@@ -26,8 +26,7 @@ $sql = "INSERT INTO rooms (serial_id, renter_id, city, street, price, image, des
 if($conn->query($sql) === TRUE){
     $room_id=$conn->insert_id;
     echo "Room added successfully! RoomID: $room_id";
-     header("Location: index.html");
-     exit();
+     
 } else {
     echo "Error: " . $conn->error;
 }
