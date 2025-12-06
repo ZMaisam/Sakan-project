@@ -1,6 +1,6 @@
 <?php
 session_start();
-include "connect.php"; // ملف الاتصال بقاعدة البيانات
+include "connectt.php"; // ملف الاتصال بقاعدة البيانات
 
 $name     = $_POST['name'];
 $phone    = $_POST['phone'];
