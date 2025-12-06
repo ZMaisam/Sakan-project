@@ -57,25 +57,25 @@
         <section class="form-card" data-animate>
           <h2>Post a New Room</h2>
 
-          <form id="room-form" class="form-grid">
+          <form  action="post.php" id="room-form" class="form-grid" method="POST">
             <label class="field">
               <span>Title</span>
-              <input type="text" id="rf-title" required />
+              <input type="text" id="rf-title" name="title" required />
             </label>
 
             <label class="field">
               <span>City</span>
-              <input type="text" id="rf-city" required />
+              <input type="text" id="rf-city" name="city"required />
             </label>
 
             <label class="field">
               <span>Street</span>
-              <input type="text" id="rf-street" required />
+              <input type="text" id="rf-street" name ="street" required />
             </label>
 
             <label class="field">
               <span>Price</span>
-              <input type="number" id="rf-price" required min="0" />
+              <input type="number" id="rf-price"name="price" required min="0" />
             </label>
 
             <label class="field">
@@ -83,6 +83,7 @@
               <textarea
                 id="rf-images"
                 placeholder="مثال: images/room1.jpg, images/room2.jpg, https://example.com/photo3.jpg"
+                name="image"
                 required
                 style="height: 70px; resize: vertical"
               ></textarea>
@@ -90,12 +91,12 @@
 
             <label class="field">
               <span>Description</span>
-              <textarea id="rf-desc" rows="3" required></textarea>
+              <textarea id="rf-desc" rows="3" name="desc"required></textarea>
             </label>
 
             <label class="field">
               <span>Allowed Gender</span>
-              <select id="rf-allowed" required>
+              <select id="rf-allowed" name ="gender" required>
                 <option value="any"></option>
                 <option value="male">ذكور فقط</option>
                 <option value="female">إناث فقط</option>
