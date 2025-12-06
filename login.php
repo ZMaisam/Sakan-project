@@ -1,37 +1,44 @@
 <?php
 session_start();
-include "connect.php"; 
+require "connect.php";
 
-$email = $_POST['email'];
-$password = $_POST['password'];
-
-// Check in renter table first
-$sql_renter = "SELECT * FROM renter WHERE email='$email'";
-$result_renter = $conn->query($sql_renter);
-
-if ($result_renter->num_rows > 0) {
-    $row = $result_renter->fetch_assoc();
-
-    if (password_verify($password, $row['password'])) {
-        $_SESSION['renter_id'] = $row['id'];
-        header("Location: myposts.html");
-        exit();
-    }
+if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+    header("Location: login.html");
+    exit();
 }
 
-// Check in student table
-$sql_student = "SELECT * FROM student WHERE email='$email'";
-$result_student = $conn->query($sql_student);
+$email    = trim($_POST['email'] ?? '');
+$password = $_POST['password'] ?? '';
 
-if ($result_student->num_rows > 0) {
-    $row = $result_student->fetch_assoc();
-
-    if (password_verify($password, $row['password'])) {
-        $_SESSION['student_id'] = $row['id'];
-        header("Location: index.html");
-        exit();
-    }
+if (!$email || !$password) {
+    die("يرجى تعبئة جميع الحقول.");
 }
+
+/* 1) try renter */
+$stmt = $conn->prepare("SELECT id, password FROM renter WHERE email = ?");
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$stmt->bind_result($id, $hash);
+if ($stmt->fetch() && password_verify($password, $hash)) {
+    $_SESSION['renter_id'] = $id;
+    $stmt->close();
+    header("Location: myposts.html");
+    exit();
+}
+$stmt->close();
+
+/* 2) try student */
+$stmt = $conn->prepare("SELECT id, password FROM student WHERE email = ?");
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$stmt->bind_result($id, $hash);
+if ($stmt->fetch() && password_verify($password, $hash)) {
+    $_SESSION['student_id'] = $id;
+    $stmt->close();
+    header("Location: index.html");
+    exit();
+}
+$stmt->close();
 
 echo "Wrong email or password.";
 ?>

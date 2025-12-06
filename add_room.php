@@ -1,36 +1,54 @@
 <?php
-
 session_start();
-include "connect.php";
+require "connect.php";
 
-// تأكد أن المستخدم مؤجر
-if(!isset($_SESSION['renter_id'])){
-    die("You must be logged in as a renter to add a room.");
+if (!isset($_SESSION['renter_id'])) {
+    die("You must be logged in as a renter.");
 }
 
 $renter_id = $_SESSION['renter_id'];
 
-// استقبال بيانات الفورم
-$city = $_POST['city'];
-$street = $_POST['street'];
-$price = $_POST['price'];
-$image = $_POST['image'];
-$desc = $_POST['desc'];
-$allowed_gender = $_POST['gender'];
-$title = $_POST['title'];
+$title  = trim($_POST['title']  ?? '');
+$city   = trim($_POST['city']   ?? '');
+$street = trim($_POST['street'] ?? '');
+$price  = trim($_POST['price']  ?? '');
+$image  = trim($_POST['image']  ?? '');
+$desc   = trim($_POST['desc']   ?? '');
+$gender = $_POST['gender'] ?? 'any';
 
-$serial_id = "RM-" . time() . rand(100,999);
-
-// تسجيل الغرفة في قاعدة البيانات
-$sql = "INSERT INTO rooms (serial_id, renter_id, city, street, price, image, description, gender, title)
-        VALUES ('$serial_id', '$renter_id', '$city', '$street', '$price', '$image', '$desc', '$gender', '$title')";
-
-if($conn->query($sql) === TRUE){
-    $room_id=$conn->insert_id;
-    echo "Room added successfully! RoomID: $room_id";
-     header("Location: index.html");
-     exit();
-} else {
-    echo "Error: " . $conn->error;
+if ($title === '' || $city === '' || $street === '' || $price === '' || $image === '' || $desc === '') {
+    die("Missing required fields.");
 }
-?>
+
+$serial_id = "RM-" . time() . rand(100, 999);
+
+$sql = "INSERT INTO poster_room
+        (renter_id, title, city, street, price, description, availability, return_phone, image, gender, serial_id)
+        VALUES (?, ?, ?, ?, ?, ?, 'available', '', ?, ?, ?)";
+
+$stmt = $conn->prepare($sql);
+if (!$stmt) {
+    die("SQL error: " . $conn->error);
+}
+
+$stmt->bind_param(
+    "issssssss",
+    $renter_id,
+    $title,
+    $city,
+    $street,
+    $price,
+    $desc,
+    $image,
+    $gender,
+    $serial_id
+);
+
+if (!$stmt->execute()) {
+    die("Insert failed: " . $stmt->error);
+}
+
+$stmt->close();
+
+header("Location: myposts.html");
+exit;

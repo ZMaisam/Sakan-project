@@ -2,213 +2,120 @@
   const q = (s) => document.querySelector(s);
   const qa = (s) => Array.from(document.querySelectorAll(s));
 
-
+  // Only for saved rooms list
   const LS = {
-    getRooms() {
-      const raw = JSON.parse(localStorage.getItem("rooms") || "[]");
-
-      return raw.map((r) => {
-        if (!r.images) r.images = [];
-        return r;
-      });
-    },
-
-    setRooms(r) {
-      localStorage.setItem("rooms", JSON.stringify(r));
-    },
-
     getSaved() {
       return JSON.parse(localStorage.getItem("savedRooms") || "[]");
     },
     setSaved(arr) {
       localStorage.setItem("savedRooms", JSON.stringify(arr));
-    },
-
-    getUsers() {
-      return JSON.parse(localStorage.getItem("users") || "[]");
-    },
-    setUsers(u) {
-      localStorage.setItem("users", JSON.stringify(u));
-    },
-
-    getCurrentUser() {
-      return JSON.parse(localStorage.getItem("currentUser") || "null");
-    },
-    setCurrentUser(u) {
-      if (u) localStorage.setItem("currentUser", JSON.stringify(u));
-      else localStorage.removeItem("currentUser");
-    },
-
-    getSelectedRoom() {
-      return localStorage.getItem("selectedRoom");
-    },
-    setSelectedRoom(id) {
-      localStorage.setItem("selectedRoom", id);
-    },
-
-    getNextRoomId() {
-      const n = Number(localStorage.getItem("nextRoomId") || "1");
-      localStorage.setItem("nextRoomId", String(n + 1));
-      return "RM-" + String(n).padStart(4, "0");
-    },
+    }
   };
 
-
-  function seedRooms() {
-    if (LS.getRooms().length) return;
-
-    const rooms = [
-      {
-        id: LS.getNextRoomId(),
-        title: "Bright room near campus",
-        description: "Large window, fast internet, shared kitchen.",
-        city: "Ramallah",
-        street: "Al-Bireh St",
-        price: 400,
-        images: ["images/room1.jpg", "images/room5.jpg"],
-        renterPhone: "+970500000001",
-        renterId: "demo-renter-1",
-        available: true,
-        allowedGender: "female",
-        createdAt: Date.now(),
-      },
-      {
-        id: LS.getNextRoomId(),
-        title: "Cozy studio apartment",
-        description: "Private studio, fully furnished.",
-        city: "Nablus",
-        street: "University St",
-        price: 900,
-        images: ["images/room2.jpg"],
-        renterPhone: "+970500000002",
-        renterId: "demo-renter-2",
-        available: true,
-        allowedGender: "male",
-        createdAt: Date.now(),
-      },
-      {
-        id: LS.getNextRoomId(),
-        title: "Quiet room with balcony",
-        description: "Calm neighborhood with a nice balcony.",
-        city: "Ramallah",
-        street: "Main Road",
-        price: 700,
-        images: ["images/room3.jpg"],
-        renterPhone: "+970500000003",
-        renterId: "demo-renter-1",
-        available: false,
-        allowedGender: "male",
-        createdAt: Date.now(),
-      },
-    ];
-
-    LS.setRooms(rooms);
+  // ---------- API HELPERS ----------
+  async function fetchJSON(url) {
+    try {
+      const res = await fetch(url, { credentials: "include" });
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      return await res.json();
+    } catch (err) {
+      console.error("Fetch error:", err);
+      return null;
+    }
   }
 
+  async function fetchRooms() {
+    const data = await fetchJSON("get_rooms.php");
+    if (!data) return [];
+    return data.map((r) => ({
+      ...r,
+      id: r.room_id,
+      title: r.title || "",
+      city: r.city || "",
+      street: r.street || "",
+      price: Number(r.price) || 0,
+      description: r.description || "",
+      availability: r.availability || "available",
+      gender: r.gender || "any",
+      images: Array.isArray(r.images) ? r.images : []
+    }));
+  }
 
-function headerBehavior() {
-  const header = q("#site-header");
-  const heroBg = q(".hero-bg");
+  async function fetchMyRooms() {
+    const data = await fetchJSON("get_my_rooms.php");
+    if (!data || data.error) return [];
+    return data.map((r) => ({
+      ...r,
+      id: r.room_id,
+      title: r.title || "",
+      city: r.city || "",
+      street: r.street || "",
+      price: Number(r.price) || 0,
+      description: r.description || "",
+      availability: r.availability || "available",
+      gender: r.gender || "any",
+      images: Array.isArray(r.images) ? r.images : []
+    }));
+  }
 
-  if (header) {
-    window.addEventListener(
-      "scroll",
-      () => {
-        const y = window.scrollY;
-        if (y > 40) header.classList.add("scrolled");
-        else header.classList.remove("scrolled");
+  async function fetchRoomById(id) {
+    const data = await fetchJSON("get_room.php?id=" + encodeURIComponent(id));
+    if (!data || data.error) return null;
+    return {
+      ...data,
+      id: data.room_id,
+      title: data.title || "",
+      city: data.city || "",
+      street: data.street || "",
+      price: Number(data.price) || 0,
+      description: data.description || "",
+      availability: data.availability || "available",
+      gender: data.gender || "any",
+      images: Array.isArray(data.images) ? data.images : []
+    };
+  }
 
-        if (heroBg) {
-          heroBg.style.transform = `translateY(${y * 0.12}px) scale(${
-            1 + Math.min(y / 3000, 0.03)
-          })`;
+  // ---------- HEADER / MENU ----------
+  function headerBehavior() {
+    const header = q("#site-header");
+    const heroBg = q(".hero-bg");
+
+    if (header) {
+      window.addEventListener(
+        "scroll",
+        () => {
+          const y = window.scrollY;
+          if (y > 40) header.classList.add("scrolled");
+          else header.classList.remove("scrolled");
+
+          if (heroBg) {
+            heroBg.style.transform = `translateY(${y * 0.12}px) scale(${
+              1 + Math.min(y / 3000, 0.03)
+            })`;
+          }
+        },
+        { passive: true }
+      );
+    }
+
+    const hamb = q("#hamburger");
+    const mm = q("#mobile-menu");
+
+    if (hamb && mm) {
+      hamb.onclick = () => mm.classList.toggle("open");
+
+      document.addEventListener("click", (e) => {
+        if (!mm.contains(e.target) && !hamb.contains(e.target)) {
+          mm.classList.remove("open");
         }
-      },
-      { passive: true }
-    );
-  }
-
-  const hamb = q("#hamburger");
-  const mm = q("#mobile-menu");
-
-  if (hamb) {
-    hamb.onclick = () => mm.classList.toggle("open");
-  }
-
-  document.addEventListener("click", (e) => {
-    if (!mm.contains(e.target) && !hamb.contains(e.target)) {
-      mm.classList.remove("open");
+      });
     }
-  });
-}
-
-function initRenterPosts() {
-  const page = q("#renter-posts-page");
-  if (!page) return;
-
-  const user = LS.getCurrentUser();
-  if (!user || user.type !== "renter") {
-    alert("أنت لست مؤجر.");
-    window.location.href = "login.html";
-    return;
   }
-
-  const grid = q("#posts-grid");
-  const addBtn = q("#add-post-btn");
-
-  addBtn.onclick = () => window.location.href = "myposts.html";
-
-  function renderMyPosts() {
-    const posts = LS.getRooms().filter((r) => r.renterId === user.id);
-    grid.innerHTML = "";
-
-    if (!posts.length) {
-      grid.innerHTML = `<p class="muted">لا يوجد منشورات بعد.</p>`;
-      return;
-    }
-
-    posts.forEach((post) => {
-      const card = document.createElement("article");
-      card.className = "card";
-
-      card.innerHTML = `
-        <img src="${post.images[0] || "images/default.jpg"}">
-
-        <div class="meta">
-          <div>
-            <div style="font-weight:700">${post.title}</div>
-            <div class="muted">${post.city} • ${post.street}</div>
-          </div>
-          <div class="price">${post.price}₪</div>
-        </div>
-
-        <div class="actions" style="margin-top:10px">
-          <button class="icon-btn delete-btn" data-id="${post.id}">حذف</button>
-        </div>
-      `;
-
-      grid.appendChild(card);
-    });
-
-    qa(".delete-btn").forEach((btn) => {
-      btn.onclick = () => {
-        if (!confirm("هل أنت متأكد من حذف المنشور؟")) return;
-
-        let posts = LS.getRooms();
-        posts = posts.filter((p) => p.id !== btn.dataset.id);
-        LS.setRooms(posts);
-
-        renderMyPosts();
-      };
-    });
-  }
-
-  renderMyPosts();
-}
-
 
   function animateOnScroll() {
     const els = qa("[data-animate]");
+    if (!els.length) return;
+
     const io = new IntersectionObserver((entries, obs) => {
       entries.forEach((e) => {
         if (e.isIntersecting) {
@@ -221,35 +128,65 @@ function initRenterPosts() {
     els.forEach((el) => io.observe(el));
   }
 
-
-  function populateFilters() {
-    const citySel = q("#filter-city");
-    const streetSel = q("#filter-street");
-    if (!citySel || !streetSel) return;
-
-    const rooms = LS.getRooms();
-    const cities = [...new Set(rooms.map((r) => r.city))];
-    const streets = [...new Set(rooms.map((r) => r.street))];
-
-    citySel.innerHTML =
-      '<option value="">الكل</option>' +
-      cities.map((c) => `<option>${c}</option>`).join("");
-
-    streetSel.innerHTML =
-      '<option value="">الكل</option>' +
-      streets.map((s) => `<option>${s}</option>`).join("");
+  function showRenterLinks() {
+    // JS can't see PHP session, so safest is to hide renter links by default.
+    // If you want, you can later make a small API that says whether current user is renter.
+    const links = document.querySelectorAll(".renter-only");
+    links.forEach((l) => (l.style.display = "none"));
   }
 
+  // ---------- FILTER HELPERS ----------
+  function populateFiltersFromRooms(rooms, citySel, streetSel) {
+    if (!citySel || !streetSel) return;
 
+    const cities = [...new Set(rooms.map((r) => r.city).filter(Boolean))];
+    const streets = [...new Set(rooms.map((r) => r.street).filter(Boolean))];
+
+    citySel.innerHTML =
+      '<option value="">All Cities</option>' +
+      cities.map((c) => `<option value="${c}">${c}</option>`).join("");
+
+    streetSel.innerHTML =
+      '<option value="">All Streets</option>' +
+      streets.map((s) => `<option value="${s}">${s}</option>`).join("");
+  }
+
+  function applyFilters(rooms, { keyword, city, street, min, max }) {
+    keyword = (keyword || "").toLowerCase();
+    min = min ? Number(min) : null;
+    max = max ? Number(max) : null;
+
+    return rooms.filter((r) => {
+      const price = Number(r.price) || 0;
+      const matchesKey =
+        !keyword ||
+        r.title.toLowerCase().includes(keyword) ||
+        r.description.toLowerCase().includes(keyword) ||
+        r.city.toLowerCase().includes(keyword) ||
+        r.street.toLowerCase().includes(keyword);
+
+      const matchesCity = !city || r.city === city;
+      const matchesStreet = !street || r.street === street;
+      const matchesMin = min === null || price >= min;
+      const matchesMax = max === null || price <= max;
+
+      return matchesKey && matchesCity && matchesStreet && matchesMin && matchesMax;
+    });
+  }
+
+  // ---------- CARDS ----------
   function makeCard(room) {
     const saved = LS.getSaved();
-    const isSaved = saved.includes(room.id);
+    const idStr = String(room.id);
+    const isSaved = saved.includes(idStr);
+    const imgSrc =
+      room.images && room.images.length ? room.images[0] : "images/default.jpg";
 
     const card = document.createElement("article");
     card.className = "card";
 
     card.innerHTML = `
-      <img src="${room.images[0] || "images/default.jpg"}">
+      <img src="${imgSrc}">
 
       <div class="meta">
         <div>
@@ -265,20 +202,24 @@ function initRenterPosts() {
 
       <div class="meta" style="margin-top:12px">
         <div class="badge ${
-          room.available ? "badge-available" : "badge-unavailable"
-        }">${room.available ? "متاح" : "غير متاح"}</div>
+          room.availability === "available"
+            ? "badge-available"
+            : "badge-unavailable"
+        }">
+          ${room.availability === "available" ? "متاح" : "غير متاح"}
+        </div>
 
-        <div class="badge ${room.allowedGender}">
+        <div class="badge ${room.gender}">
           ${
-            room.allowedGender === "male"
+            room.gender === "male"
               ? "ذكور"
-              : room.allowedGender === "female"
+              : room.gender === "female"
               ? "إناث"
               : "الجميع"
           }
         </div>
 
-        <span class="muted">ID: ${room.id}</span>
+        <span class="muted">ID: ${room.serial_id || room.id}</span>
       </div>
 
       <div class="actions">
@@ -286,7 +227,6 @@ function initRenterPosts() {
           ${isSaved ? "تم الحفظ ❤️" : "حفظ ♡"}
         </button>
         <button class="icon-btn det-btn" data-id="${room.id}">تفاصيل</button>
-        <a class="icon-btn" href="tel:${room.renterPhone}">اتصال</a>
       </div>
     `;
 
@@ -311,7 +251,7 @@ function initRenterPosts() {
     qa(".save-btn").forEach((btn) => {
       btn.onclick = () => {
         let saved = LS.getSaved();
-        const id = btn.dataset.id;
+        const id = String(btn.dataset.id);
 
         if (saved.includes(id)) {
           saved = saved.filter((x) => x !== id);
@@ -327,145 +267,171 @@ function initRenterPosts() {
 
     qa(".det-btn").forEach((btn) => {
       btn.onclick = () => {
-        LS.setSelectedRoom(btn.dataset.id);
-        window.location.href = "details.html";
+        const id = btn.dataset.id;
+        window.location.href = "details.html?id=" + encodeURIComponent(id);
       };
     });
   }
 
+  // ---------- PAGE-SPECIFIC INITIALIZERS ----------
 
   function initHome() {
     if (!q("#hero")) return;
-    populateFilters();
-    renderList(LS.getRooms());
+
+    const form = q("#hero-search");
+    const citySel = q("#filter-city");
+    const streetSel = q("#filter-street");
+    const minInput = q("#filter-min");
+    const maxInput = q("#filter-max");
+    const keyInput = q("#search-key");
+
+    fetchRooms().then((rooms) => {
+      populateFiltersFromRooms(rooms, citySel, streetSel);
+      renderList(rooms);
+
+      if (form) {
+        form.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const filtered = applyFilters(rooms, {
+            keyword: keyInput.value,
+            city: citySel.value,
+            street: streetSel.value,
+            min: minInput.value,
+            max: maxInput.value
+          });
+          renderList(filtered);
+        });
+      }
+    });
   }
 
   function initRooms() {
     if (!q("#rooms-page")) return;
-    populateFilters();
-    renderList(LS.getRooms());
+
+    const form = q("#rooms-search");
+    const citySel = q("#filter-city");
+    const streetSel = q("#filter-street");
+    const minInput = q("#filter-min");
+    const maxInput = q("#filter-max");
+    const keyInput = q("#search-key");
+
+    fetchRooms().then((rooms) => {
+      populateFiltersFromRooms(rooms, citySel, streetSel);
+      renderList(rooms);
+
+      if (form) {
+        form.addEventListener("submit", (e) => {
+          e.preventDefault();
+          const filtered = applyFilters(rooms, {
+            keyword: keyInput.value,
+            city: citySel.value,
+            street: streetSel.value,
+            min: minInput.value,
+            max: maxInput.value
+          });
+          renderList(filtered);
+        });
+      }
+    });
   }
 
   function initSaved() {
     if (!q("#saved-page")) return;
-    const saved = LS.getSaved();
-    const rooms = LS.getRooms().filter((r) => saved.includes(r.id));
-    renderList(rooms);
+
+    fetchRooms().then((rooms) => {
+      const savedIds = LS.getSaved();
+      const filtered = rooms.filter((r) =>
+        savedIds.includes(String(r.id))
+      );
+      renderList(filtered);
+    });
   }
 
   function initDetails() {
     if (!q("#details-page")) return;
 
-    const id = LS.getSelectedRoom();
-    const room = LS.getRooms().find((r) => r.id === id);
+    const params = new URLSearchParams(window.location.search);
+    const id = params.get("id");
+    const container = q("#details-page .container");
 
-    if (!room) {
-      q("#details-page .container").innerHTML =
-        `<p class="muted">الغرفة غير موجودة.</p>`;
+    if (!id) {
+      if (container)
+        container.innerHTML = `<p class="muted">لا توجد غرفة محددة.</p>`;
       return;
     }
 
-    q("#det-title").textContent = room.title;
-    q("#det-location").textContent = room.city + " • " + room.street;
-    q("#det-desc").textContent = room.description;
-    q("#det-price").textContent = room.price;
-    q("#det-id").textContent = room.id;
-    q("#det-avail").textContent = room.available ? "متاح" : "غير متاح";
-    q("#det-phone").textContent = room.renterPhone;
-
-    const slide = q(".slides");
-    slide.innerHTML = "";
-    room.images.forEach((img, i) => {
-      const el = document.createElement("img");
-      el.src = img;
-      if (i === 0) el.classList.add("active");
-      slide.appendChild(el);
-    });
-  }
-
-
-  function initAddPost() {
-    const page = q("#addpost-page");
-    if (!page) return;
-
-    const user = LS.getCurrentUser();
-    if (!user || user.type !== "renter") {
-      alert("أنت لست مؤجر");
-      window.location.href = "signup.html";
-      return;
-    }
-
-    const form = q("#addpost-form");
-
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-
-      const title = q("#ap-title").value.trim();
-      const city = q("#ap-city").value.trim();
-      const street = q("#ap-street").value.trim();
-      const price = Number(q("#ap-price").value);
-      const desc = q("#ap-desc").value.trim();
-      const gender = q("#ap-gender").value;
-      const images = q("#ap-images")
-        .value.split(",")
-        .map((x) => x.trim())
-        .filter((x) => x);
-
-      if (!title || !city || !street || !price || !desc || !gender || !images.length) {
-        alert("يرجى تعبئة جميع الحقول.");
+    fetchRoomById(id).then((room) => {
+      if (!room) {
+        if (container)
+          container.innerHTML = `<p class="muted">الغرفة غير موجودة.</p>`;
         return;
       }
 
-      const rooms = LS.getRooms();
-      rooms.push({
-        id: LS.getNextRoomId(),
-        title,
-        description: desc,
-        city,
-        street,
-        price,
-        images,
-        renterPhone: user.phone,
-        renterId: user.id,
-        allowedGender: gender,
-        available: true,
-        createdAt: Date.now(),
-      });
+      q("#det-title").textContent = room.title;
+      q("#det-location").textContent = room.city + " • " + room.street;
+      q("#det-desc").textContent = room.description;
+      q("#det-price").textContent = room.price;
+      q("#det-id").textContent = room.serial_id || room.id;
+      q("#det-avail").textContent =
+        room.availability === "available" ? "متاح" : "غير متاح";
+      q("#det-phone").textContent = ""; // fill later from renter table if needed
 
-      LS.setRooms(rooms);
+      const slide = q(".slides");
+      if (slide) {
+        slide.innerHTML = "";
+        (room.images || []).forEach((img, i) => {
+          const el = document.createElement("img");
+          el.src = img;
+          if (i === 0) el.classList.add("active");
+          slide.appendChild(el);
+        });
+      }
 
-      alert("تم إضافة البوست!");
-      window.location.href = "myposts.html";
+      const detSave = q("#det-save");
+      if (detSave) {
+        detSave.onclick = () => {
+          let saved = LS.getSaved();
+          const idStr = String(room.id);
+          if (!saved.includes(idStr)) {
+            saved.push(idStr);
+            LS.setSaved(saved);
+            alert("تم الحفظ");
+          }
+        };
+      }
+
+      const detCall = q("#det-call");
+      if (detCall) {
+        detCall.disabled = true; // until renter phone is wired in
+      }
     });
   }
 
-  function initSignup() {
-    const page = q("#signup-page");
-    if (!page) return;
+  function initDashboard() {
+    if (!q("#dashboard-page")) return;
+
+    const grid = q("#dashboard-rooms");
+    if (!grid) return;
+
+    fetchMyRooms().then((rooms) => {
+      if (!rooms.length) {
+        grid.innerHTML = `<p class="muted">لا يوجد منشورات بعد.</p>`;
+        return;
+      }
+
+      grid.innerHTML = "";
+      rooms.forEach((room) => {
+        const card = makeCard(room);
+        grid.appendChild(card);
+      });
+      attachCardEvents();
+    });
+    // Posting form is normal HTML form -> handled entirely by add_room.php
   }
 
-
-  function initLogin() {
-    const page = q("#login-page");
-    if (!page) return;
-  }
-
-
-  function showRenterLinks() {
-    const user = LS.getCurrentUser();
-    const links = document.querySelectorAll(".renter-only");
-
-    if (user && user.type === "renter") {
-      links.forEach((l) => (l.style.display = "block"));
-    } else {
-      links.forEach((l) => (l.style.display = "none"));
-    }
-  }
-
-
+  // ---------- BOOTSTRAP ----------
   document.addEventListener("DOMContentLoaded", () => {
     showRenterLinks();
-    seedRooms();
     headerBehavior();
     animateOnScroll();
 
@@ -473,9 +439,6 @@ function initRenterPosts() {
     initRooms();
     initSaved();
     initDetails();
-    initAddPost();
-   initRenterPosts(); 
-    initSignup();
-    initLogin();
+    initDashboard();
   });
 })();
