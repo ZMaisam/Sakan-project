@@ -16,9 +16,9 @@
       <div class="container header-inner">
         <div class="logo">
           <a href="index.html"
-            ><span class="logo-mark">🏠</span
-           <span class="logo-text">sakan سكن</span>
-
+            ><span class="logo-mark">🏠</span>
+            <span class="logo-text">sakan سكن</span>
+          </a>
         </div>
         <nav class="nav">
           <a href="index.html">الصفحةالرئيسية</a>
@@ -27,7 +27,6 @@
           <a href="signup.html">حساب جديد</a>
           <a href="login.html">تسجيل الدخول</a>
           <a href="myposts.html" class="renter-only">منشوراتي</a>
-
         </nav>
         <button id="hamburger" class="hamburger">
           <span></span><span></span><span></span>
@@ -39,79 +38,77 @@
       <div class="container">
         <div class="form-card" data-animate>
           <h1>Create Account</h1>
-          <p class="muted">
-            Choose whether you are a student (طالب) or renter (مؤجر).
-          </p>
+          <p class="muted">Choose whether you are a student (طالب) or renter (مؤجر).</p>
 
-          <form id="signup-form" class="form-grid">
+          <!-- FORM START -->
+          <form action="register.php" id="signup-form" class="form-grid" method="POST">
             <label class="field">
               <span>Full Name / الاسم</span>
-              <input type="text" id="su-name" required />
+              <input type="text" name="name" id="su-name" required />
             </label>
 
             <label class="field">
               <span>Phone Number / رقم الهاتف</span>
-              <input type="tel" id="su-phone" required />
+              <input type="tel" name="phone" id="su-phone" required />
             </label>
 
             <label class="field">
               <span>Email</span>
-              <input type="email" id="su-email" required />
+              <input type="email" name="email" id="su-email" required />
             </label>
 
             <label class="field">
               <span>Password</span>
-              <input type="password" id="su-pass" required />
+              <input type="password" name="password" id="su-pass" required />
             </label>
 
-                <label class="field">
-  <span>Gender / الجنس</span>
-  <select id="su-gender" required>
-    <option value="">اختر الجنس</option>
-    <option value="male">ذكر</option>
-    <option value="female">انثى</option>
-  </select>
-</label>
+            <label class="field">
+              <span>Gender / الجنس</span>
+              <select name="type" id="su-gender" required >
+                <option value="">اختر الجنس</option>
+                <option value="male">ذكر</option>
+                <option value="female">انثى</option>
+              </select>
+            </label>
 
-            <aside id="mobile-menu" class="mobile-menu">
-              <a href="index.html">الصفحة الرئيسية</a>
-              <a href="rooms.html">الغـرف المتاحة</a>
-              <a href="saved.html">المحفوظات</a>
-              <a href="signup.html">حساب جديد</a>
-              <a href="login.html">تسجيل الدخول</a>
-              <a href="myposts.html" class="renter-only" style="display:none"> منشوراتي</a>
+            <div class="field">
+              <span>User Type / نوع الحساب</span>
 
-            </aside>
+              <div class="radio-group">
+                <div class="radio-option">
+                  <input type="radio" name="role" value="student" required />
+                  <label>طالب (Student)</label>
+                </div>
 
-           <div class="field">
-  <span>User Type / نوع الحساب</span>
-
-  <div class="radio-group">
-
-    <div class="radio-option">
-      <input type="radio" name="su-type" value="student" required />
-      <label>طالب (Student)</label>
-    </div>
-
-    <div class="radio-option">
-      <input type="radio" name="su-type" value="renter" required />
-      <label>مؤجر (Renter)</label>
-    </div>
-
-  </div>
-</div>
-
+                <div class="radio-option">
+                  <input type="radio" name="role" value="renter" required />
+                  <label>مؤجر (Renter)</label>
+                </div>
+              </div>
+            </div>
 
             <button type="submit" class="btn-primary btn-block">
               Create Account
             </button>
+
             <p class="muted center">
               Already have an account? <a href="login.html">Login</a>
             </p>
           </form>
+          <!-- FORM END -->
         </div>
       </div>
     </main>
+
+    <!-- MOVED HERE (outside form) -->
+    <aside id="mobile-menu" class="mobile-menu">
+      <a href="index.html">الصفحة الرئيسية</a>
+      <a href="rooms.html">الغـرف المتاحة</a>
+      <a href="saved.html">المحفوظات</a>
+      <a href="signup.html">حساب جديد</a>
+      <a href="login.html">تسجيل الدخول</a>
+      <a href="myposts.html" class="renter-only" style="display:none"> منشوراتي</a>
+    </aside>
 
     <script src="script.js" defer></script>
   </body>
