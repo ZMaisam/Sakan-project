@@ -1,6 +1,6 @@
 <?php
 session_start();
-include "connect.php";
+include "connectt.php";
 
 // تأكد أن المستخدم مؤجر
 if(!isset($_SESSION['renter_id'])){
