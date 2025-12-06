@@ -442,75 +442,12 @@ function initRenterPosts() {
   function initSignup() {
     const page = q("#signup-page");
     if (!page) return;
-
-    const form = q("#signup-form");
-
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-
-      const name = q("#su-name").value.trim();
-      const phone = q("#su-phone").value.trim();
-      const email = q("#su-email").value.trim().toLowerCase();
-      const pass = q("#su-pass").value;
-      const type = (form.querySelector('input[name="su-type"]:checked') || {})
-        .value;
-      const gender = q("#su-gender").value;
-
-      if (!name || !phone || !email || !pass || !type || !gender) {
-        alert("يرجى تعبئة جميع الحقول.");
-        return;
-      }
-
-      const users = LS.getUsers();
-      if (users.some((u) => u.email === email)) {
-        alert("هذا الإيميل مسجل مسبقاً.");
-        return;
-      }
-
-      const user = {
-        id: "U-" + Date.now(),
-        name,
-        phone,
-        email,
-        pass,
-        type,
-        gender,
-      };
-
-      users.push(user);
-      LS.setUsers(users);
-      LS.setCurrentUser(user);
-
-      if (type === "renter") window.location.href = "myposts.html";
-      else window.location.href = "rooms.html";
-    });
   }
 
 
   function initLogin() {
     const page = q("#login-page");
     if (!page) return;
-
-    q("#login-form").addEventListener("submit", (e) => {
-      e.preventDefault();
-
-      const email = q("#li-email").value.trim().toLowerCase();
-      const pass = q("#li-pass").value;
-
-      const users = LS.getUsers();
-      const user = users.find((u) => u.email === email && u.pass === pass);
-
-      if (!user) {
-        alert("بيانات خاطئة.");
-        return;
-      }
-
-      LS.setCurrentUser(user);
-
-      if (user.type === "renter")
-        window.location.href = "myposts.html";
-      else window.location.href = "rooms.html";
-    });
   }
 
 

@@ -16,6 +16,6 @@ if ($conn->connect_error) {
 // Set UTF-8 charset
 $conn->set_charset("utf8");
 
-echo "Connected successfully";
+
 
 ?>

@@ -1,4 +1,5 @@
 <?php
+
 session_start();
 include "connect.php";
 
@@ -15,13 +16,14 @@ $street = $_POST['street'];
 $price = $_POST['price'];
 $image = $_POST['image'];
 $desc = $_POST['desc'];
-$allowed_gender = $_POST['allowed_gender'];
+$allowed_gender = $_POST['gender'];
+$title = $_POST['title'];
 
 $serial_id = "RM-" . time() . rand(100,999);
 
 // تسجيل الغرفة في قاعدة البيانات
-$sql = "INSERT INTO rooms (serial_id, renter_id, city, street, price, image, description, gender)
-        VALUES ('$serial_id', '$renter_id', '$city', '$street', '$price', '$image', '$desc', '$allowed_gender')";
+$sql = "INSERT INTO rooms (serial_id, renter_id, city, street, price, image, description, gender, title)
+        VALUES ('$serial_id', '$renter_id', '$city', '$street', '$price', '$image', '$desc', '$gender', '$title')";
 
 if($conn->query($sql) === TRUE){
     $room_id=$conn->insert_id;

@@ -11,7 +11,6 @@
     />
   </head>
   <body>
-
     <header id="site-header" class="header">
       <div class="container header-inner">
         <div class="logo">
@@ -38,10 +37,17 @@
       <div class="container">
         <div class="form-card" data-animate>
           <h1>Create Account</h1>
-          <p class="muted">Choose whether you are a student (طالب) or renter (مؤجر).</p>
+          <p class="muted">
+            Choose whether you are a student (طالب) or renter (مؤجر).
+          </p>
 
           <!-- FORM START -->
-          <form action="register.php" id="signup-form" class="form-grid" method="POST">
+          <form
+            action="signup.php"
+            id="signup-form"
+            class="form-grid"
+            method="POST"
+          >
             <label class="field">
               <span>Full Name / الاسم</span>
               <input type="text" name="name" id="su-name" required />
@@ -64,7 +70,7 @@
 
             <label class="field">
               <span>Gender / الجنس</span>
-              <select name="type" id="su-gender" required >
+              <select name="gender" id="su-gender" required>
                 <option value="">اختر الجنس</option>
                 <option value="male">ذكر</option>
                 <option value="female">انثى</option>
@@ -107,7 +113,9 @@
       <a href="saved.html">المحفوظات</a>
       <a href="signup.html">حساب جديد</a>
       <a href="login.html">تسجيل الدخول</a>
-      <a href="myposts.html" class="renter-only" style="display:none"> منشوراتي</a>
+      <a href="myposts.html" class="renter-only" style="display: none">
+        منشوراتي</a
+      >
     </aside>
 
     <script src="script.js" defer></script>
