@@ -2,7 +2,6 @@
   const q = (s) => document.querySelector(s);
   const qa = (s) => Array.from(document.querySelectorAll(s));
 
-  // Only for saved rooms list
   const LS = {
     getSaved() {
       return JSON.parse(localStorage.getItem("savedRooms") || "[]");
@@ -12,7 +11,6 @@
     }
   };
 
-  // ---------- API HELPERS ----------
   async function fetchJSON(url) {
     try {
       const res = await fetch(url, { credentials: "include" });
@@ -75,7 +73,7 @@
     };
   }
 
-  // ---------- HEADER / MENU ----------
+ 
   function headerBehavior() {
     const header = q("#site-header");
     const heroBg = q(".hero-bg");
@@ -129,13 +127,11 @@
   }
 
   function showRenterLinks() {
-    // JS can't see PHP session, so safest is to hide renter links by default.
-    // If you want, you can later make a small API that says whether current user is renter.
+ 
     const links = document.querySelectorAll(".renter-only");
     links.forEach((l) => (l.style.display = "none"));
   }
 
-  // ---------- FILTER HELPERS ----------
   function populateFiltersFromRooms(rooms, citySel, streetSel) {
     if (!citySel || !streetSel) return;
 
@@ -174,7 +170,7 @@
     });
   }
 
-  // ---------- CARDS ----------
+  
   function makeCard(room) {
     const saved = LS.getSaved();
     const idStr = String(room.id);
@@ -273,7 +269,7 @@
     });
   }
 
-  // ---------- PAGE-SPECIFIC INITIALIZERS ----------
+  
 
   function initHome() {
     if (!q("#hero")) return;
@@ -374,7 +370,7 @@
       q("#det-id").textContent = room.serial_id || room.id;
       q("#det-avail").textContent =
         room.availability === "available" ? "متاح" : "غير متاح";
-      q("#det-phone").textContent = ""; // fill later from renter table if needed
+      q("#det-phone").textContent = ""; 
 
       const slide = q(".slides");
       if (slide) {
@@ -402,38 +398,167 @@
 
       const detCall = q("#det-call");
       if (detCall) {
-        detCall.disabled = true; // until renter phone is wired in
+        detCall.disabled = true; 
       }
     });
   }
 
   function initDashboard() {
-    if (!q("#dashboard-page")) return;
+  if (!q("#dashboard-page")) return;
 
-    const grid = q("#dashboard-rooms");
-    if (!grid) return;
+  const grid = q("#dashboard-rooms");
+  if (!grid) return;
 
-    fetchMyRooms().then((rooms) => {
-      if (!rooms.length) {
-        grid.innerHTML = `<p class="muted">لا يوجد منشورات بعد.</p>`;
-        return;
-      }
+  fetchMyRooms().then((rooms) => {
+    if (!rooms.length) {
+      grid.innerHTML = `<p class="muted">لا يوجد منشورات بعد.</p>`;
+      return;
+    }
 
-      grid.innerHTML = "";
-      rooms.forEach((room) => {
-        const card = makeCard(room);
-        grid.appendChild(card);
-      });
-      attachCardEvents();
+    grid.innerHTML = "";
+
+    rooms.forEach((room) => {
+      const card = document.createElement("article");
+      card.className = "card";
+
+      const imgSrc =
+        room.images && room.images.length ? room.images[0] : "images/default.jpg";
+
+      card.innerHTML = `
+        <img src="${imgSrc}">
+
+        <div class="meta">
+          <div>
+            <div style="font-weight:700">${room.title}</div>
+            <div class="muted">${room.city} • ${room.street}</div>
+          </div>
+          <div class="price">${room.price}₪</div>
+        </div>
+
+        <div class="muted" style="margin-top:8px">
+          ${room.description.substring(0, 90)}...
+        </div>
+
+        <div class="meta" style="margin-top:12px">
+          <div class="badge ${
+            room.availability === "available"
+              ? "badge-available"
+              : "badge-unavailable"
+          }">
+            ${room.availability === "available" ? "متاح" : "غير متاح"}
+          </div>
+
+          <div class="badge ${room.gender}">
+            ${
+              room.gender === "male"
+                ? "ذكور"
+                : room.gender === "female"
+                ? "إناث"
+                : "الجميع"
+            }
+          </div>
+
+          <span class="muted">ID: ${room.serial_id || room.id}</span>
+        </div>
+
+        <div class="actions" style="margin-top:10px">
+          <button class="icon-btn delete-room-btn" data-id="${room.id}">
+            حذف
+          </button>
+        </div>
+      `;
+
+      grid.appendChild(card);
     });
-    // Posting form is normal HTML form -> handled entirely by add_room.php
-  }
 
-  // ---------- BOOTSTRAP ----------
+    qa(".delete-room-btn").forEach((btn) => {
+      btn.onclick = () => {
+        const id = btn.dataset.id;
+        if (!confirm("هل أنت متأكد من حذف الغرفة؟")) return;
+        deleteRoom(id);
+      };
+    });
+  });
+}
+
+function loadMyRoomsFromDB() {
+    const container = document.querySelector("#dashboard-rooms");
+    if (!container) return;
+
+    fetch("load_rooms.php")
+        .then(res => res.json())
+        .then(data => {
+            container.innerHTML = "";
+
+            const rid = sessionStorage.getItem("renter_id");
+
+            const myRooms = data.filter(r => r.renter_id == rid);
+
+            if (myRooms.length === 0) {
+                container.innerHTML = "<p class='muted'>لا يوجد منشورات.</p>";
+                return;
+            }
+
+            myRooms.forEach(room => {
+                const card = document.createElement("article");
+                card.className = "card";
+
+                card.innerHTML = `
+                    <img src="${room.images[0] || 'images/default.jpg'}">
+
+                    <div class="meta">
+                      <div>
+                        <div style="font-weight:700">${room.title}</div>
+                        <div class="muted">${room.city} • ${room.street}</div>
+                      </div>
+                      <div class="price">${room.price}₪</div>
+                    </div>
+
+                    <button class="icon-btn delete-btn" data-id="${room.room_id}" style="margin-top:10px">
+                        حذف
+                    </button>
+                `;
+
+                container.appendChild(card);
+            });
+
+            document.querySelectorAll(".delete-btn").forEach(btn => {
+                btn.onclick = () => deleteRoom(btn.dataset.id);
+            });
+        });
+}
+
+function deleteRoom(id) {
+    if (!confirm("هل تريد حذف الغرفة؟")) return;
+
+    fetch("delete_room.php?id=" + id)
+        .then(res => res.text())
+        .then(txt => {
+            alert(txt);
+            loadMyRoomsFromDB(); 
+        });
+}function deleteRoom(id) {
+  fetch("delete_room.php?id=" + encodeURIComponent(id), {
+    method: "GET",
+    credentials: "include"
+  })
+    .then((res) => res.text())
+    .then((msg) => {
+      alert(msg);
+      initDashboard(); 
+    })
+    .catch((err) => {
+      console.error(err);
+      alert("حدث خطأ أثناء الحذف.");
+    });
+}
+
+
   document.addEventListener("DOMContentLoaded", () => {
     showRenterLinks();
     headerBehavior();
     animateOnScroll();
+loadMyRoomsFromDB();
 
     initHome();
     initRooms();

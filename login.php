@@ -14,7 +14,6 @@ if (!$email || !$password) {
     die("يرجى تعبئة جميع الحقول.");
 }
 
-/* 1) try renter */
 $stmt = $conn->prepare("SELECT id, password FROM renter WHERE email = ?");
 $stmt->bind_param("s", $email);
 $stmt->execute();
@@ -27,7 +26,6 @@ if ($stmt->fetch() && password_verify($password, $hash)) {
 }
 $stmt->close();
 
-/* 2) try student */
 $stmt = $conn->prepare("SELECT id, password FROM student WHERE email = ?");
 $stmt->bind_param("s", $email);
 $stmt->execute();

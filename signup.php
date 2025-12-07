@@ -12,7 +12,7 @@ $phone    = trim($_POST['phone'] ?? '');
 $email    = trim($_POST['email'] ?? '');
 $password = $_POST['password'] ?? '';
 $gender   = $_POST['gender'] ?? '';
-$type     = $_POST['role'] ?? '';  // 'student' or 'renter'
+$type     = $_POST['role'] ?? '';  
 
 if (!$name || !$phone || !$email || !$password || !$gender || !$type) {
     die("يرجى تعبئة جميع الحقول.");
@@ -20,7 +20,7 @@ if (!$name || !$phone || !$email || !$password || !$gender || !$type) {
 
 $hashed = password_hash($password, PASSWORD_DEFAULT);
 
-/* check email in both tables */
+
 $exists = false;
 
 $stmt = $conn->prepare("SELECT id FROM renter WHERE email = ?");
@@ -43,7 +43,6 @@ if ($exists) {
     die("هذا الإيميل مسجل مسبقاً.");
 }
 
-/* insert user */
 if ($type === 'renter') {
     $stmt = $conn->prepare(
         "INSERT INTO renter (name, phone_num, email, password, gender)
